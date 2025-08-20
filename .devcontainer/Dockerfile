@@ -6,7 +6,10 @@
 
 FROM ubuntu:latest
 # suppress clear apt cache
-RUN rm /etc/apt/apt.conf.d/docker-clean
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+
+# Install packages
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Set locale and timezone
 ENV LANG=ja_JP.UTF-8
@@ -31,20 +34,18 @@ RUN set -eux; \
     groupadd --gid "${GID}" "${USERNAME}"; \
     useradd --uid "${UID}" --gid "${GID}" -s /bin/bash -m "${USERNAME}"
 
-# Install packages
-ENV DEBIAN_FRONTEND=noninteractive
-
 # Enable sudo
-# RUN --mount=type=cache,target=/var/cache/apt \
-#     --mount=type=cache,sharing=locked,target=/var/lib/apt \
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
 #     apt-get update \
 #     && apt-get install -y sudo \
 #     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
 #     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # https://github.com/moby/buildkit/issues/1662#issuecomment-683962222
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,sharing=locked,target=/var/lib/apt \
+# https://docs.docker.com/reference/dockerfile/?__readwiseLocation=#example-cache-apt-packages
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
     && apt-get install --no-install-recommends -y \
     # Basic tools
