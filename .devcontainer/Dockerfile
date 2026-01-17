@@ -27,7 +27,7 @@ RUN set -eux; \
     for i in $(awk -F: '$3 >= 1000 && $3 <= 60000 { print $1 }' /etc/passwd); do \
     userdel $i; \
     done; \
-    for i in $(awk -F: '$3 >= 1000 && $3 <= 60000 { print $1 }' /etc/passwd); do \
+    for i in $(awk -F: '$3 >= 1000 && $3 <= 60000 { print $1 }' /etc/group); do \
     groupdel $i; \
     done; \
     rm -rf /home/*; \
