@@ -50,6 +50,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # Basic tools
     # ssh is required to handle GitHub in the container
     git ssh \
+    # use Python3 as default
+    python-is-python3 \
     # System tools
     locales tzdata \
     # Configure locale
