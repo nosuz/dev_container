@@ -16,7 +16,9 @@ sudo usermod -aG docker $USER
 
 ### clone boilerplate files
 
-1. このレポジトリを次のコマンドでクローンしてください。
+### Step 1
+
+このレポジトリを次のコマンドでクローンしてください。
 
 ```bash
 git clone https://github.com/nosuz/dev_container.git
@@ -29,7 +31,9 @@ code .
 # Edit .devcontainer/Dockerfile to install required APT packages before rebuilding this container.
 ```
 
-2. オプション：`.devcontainer/generate_env.sh`または`.devcontainer/generate_env.sh`を実行して USER ID を`.devcontainer/.env`に書き込んでおいてください。このオプションを実行することで、Python のライブラリーのようにユーザ権限でインストールされるファイルがある場合に、docker image の作成に必要な時間が短くなり、イメージのサイズが小さくなります。
+### Option 1
+
+オプション：`.devcontainer/generate_env.sh`または`.devcontainer/generate_env.sh`を実行して USER ID を`.devcontainer/.env`に書き込んでおいてください。このオプションを実行することで、Python のライブラリーのようにユーザ権限でインストールされるファイルがある場合に、docker image の作成に必要な時間が短くなり、イメージのサイズが小さくなります。
 
 ```bash
 bash .devcontainer/generate_env.sh
@@ -37,8 +41,13 @@ bash .devcontainer/generate_env.sh
 python .devcontainer/generate_env.py
 ```
 
-3. 必要なパッケージをインストールするように Dockerfile を編集してください。
-4. このディレクトリを VSCode で開き、コマンドパレット(Ctrl + Shift + P)で Dev Containers: Rebuild container を実行すると、コンテナイメージが作成されて接続されます。
+### Step 2
+
+必要なパッケージをインストールするように Dockerfile を編集してください。
+
+### Step 3
+
+このディレクトリを VSCode で開き、コマンドパレット(Ctrl + Shift + P)で Dev Containers: Rebuild container を実行すると、コンテナイメージが作成されて接続されます。
 
 ### user name and id
 
@@ -91,6 +100,10 @@ Hi nosuz! You've successfully authenticated, but GitHub does not provide shell a
 ```bash
 for i in $(docker image ls | awk '$1 == "<none>" && $2 == "<none>" { print $3 }'); do echo $i; docker image rm $i; done
 ```
+
+## Codex
+
+`codex.devcontainer`は、
 
 ## 参考
 
