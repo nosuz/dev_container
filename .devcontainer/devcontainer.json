@@ -1,9 +1,12 @@
 {
   "name": "DevContainer",
   "workspaceFolder": "/workspaces",
+  // set user name exists in the container
+  "remoteUser": "ubuntu",
+  "updateRemoteUserUID": true,
   // UID and GID is imported from .env file.
   "dockerComposeFile": "compose.yaml",
-  "service": "app",
+  "service": "dev",
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
 
@@ -11,7 +14,7 @@
   // "forwardPorts": [],
 
   // Uncomment the next line to run commands after the container is created.
-  // "postCreateCommand": "cat /etc/os-release",
+  // "postCreateCommand": "bash /workspaces/.devcontainer/postCreateCommand.sh",
 
   // Configure tool-specific properties.
   "customizations": {

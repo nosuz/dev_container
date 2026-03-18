@@ -1,49 +1,16 @@
-# syntax=docker/dockerfile:1
-# enable here documents.
-# RUN cat <<EOF >> /home/vscode/.bashrc
-#
-# EOF
-
+# syntax=docker/dockerfile:1.4
 FROM ubuntu:latest
 # suppress clear apt cache
-RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN rm /etc/apt/apt.conf.d/docker-clean
 
-# Install packages
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Set locale and timezone
 ENV LANG=ja_JP.UTF-8
 ENV LC_ALL=ja_JP.UTF-8
 ENV LC_CTYPE=ja_JP.UTF-8
 ENV TZ=Asia/Tokyo
 
-ARG USERNAME=vscode
-ARG UID=10000
-ARG GID=$UID
+# install packages
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Setup user and group id
-# Remove all general users and create a new user for USER direction.
-RUN set -eux; \
-    for i in $(awk -F: '$3 >= 1000 && $3 <= 60000 { print $1 }' /etc/passwd); do \
-    userdel $i; \
-    done; \
-    for i in $(awk -F: '$3 >= 1000 && $3 <= 60000 { print $1 }' /etc/group); do \
-    groupdel $i; \
-    done; \
-    rm -rf /home/*; \
-    groupadd --gid "${GID}" "${USERNAME}"; \
-    useradd --uid "${UID}" --gid "${GID}" -s /bin/bash -m "${USERNAME}"
-
-# Enable sudo
-# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-#     apt-get update \
-#     && apt-get install -y sudo \
-#     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-#     && chmod 0440 /etc/sudoers.d/$USERNAME
-
-# https://github.com/moby/buildkit/issues/1662#issuecomment-683962222
-# https://docs.docker.com/reference/dockerfile/?__readwiseLocation=#example-cache-apt-packages
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
@@ -51,8 +18,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # Basic tools
     # ssh is required to handle GitHub in the container
     git ssh \
-    # use Python3 as default
-    python-is-python3 \
     # System tools
     locales tzdata \
     # Configure locale
@@ -61,6 +26,3 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     # Configure timezone
     && ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
     && dpkg-reconfigure -f noninteractive tzdata
-
-# Default user
-USER vscode
