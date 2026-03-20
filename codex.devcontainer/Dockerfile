@@ -63,7 +63,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # ARG UV_CACHE_DIR=/opt/.cache/uv
 # RUN mkdir -p $UV_CACHE_DIR
 # # Disable development dependencies
-# ENV UV_NO_DEV=1
+# # ENV UV_NO_DEV=1
 # # specify `__pycache__` directory
 # ENV PYTHONPYCACHEPREFIX=/tmp/pycache
 
@@ -71,7 +71,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # # set `--frozen` to `uv sync` on runtime
 # RUN --mount=type=cache,target=$UV_CACHE_DIR,sharing=locked \
 #     uv venv /opt/venv \
-#     && if [ -s uv.lock ]; then uv sync --frozen; fi
+#     && if [ -s uv.lock ]; then uv sync --dev; fi
 
 # RUN chmod -R a+rX /opt/venv \
 #     && find /opt/venv -type d -perm -u+w -exec chmod a+w {} +
