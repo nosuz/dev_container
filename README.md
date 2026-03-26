@@ -70,6 +70,8 @@ UID=1000
 GID=1000
 ```
 
+この`UID`と`GID`を含む`.env`ファイルは、`generate_env.py`または`generate_env.sh`を`.devcontainer`を実行することで作成できます。ただしこれらのスクリプトは、スクリプトのあるディレクトリに`.env`ファイルを作成します。
+
 #### .devcontainer/compose.yaml
 
 ```yaml
