@@ -16,11 +16,18 @@ fi
 
 # 初期化スクリプトを実行
 
+# dev mode only
 mkdir -p /workspaces/.codex
-ln -sfn /workspaces/.codex ~/.codex
+if [ -e "$HOME/.codex" ] && [ ! -L "$HOME/.codex" ] ; then
+  mv "$HOME/.codex" "$HOME/.codex.backup.$(date +%Y%m%d%H%M%S)"
+fi
+ln -s /workspaces/.codex ~/.codex
 
 mkdir -p /workspaces/.claude
-ln -sfn /workspaces/.claude ~/.claude
+if [ -e "$HOME/.claude" ] && [ ! -L "$HOME/.claude" ] ; then
+  mv "$HOME/.claude" "$HOME/.claude.backup.$(date +%Y%m%d%H%M%S)"
+fi
+ln -s /workspaces/.claude ~/.claude
 
 # 初期化完了を示すマーカーファイルを作成
 touch "$MARKER_FILE"
