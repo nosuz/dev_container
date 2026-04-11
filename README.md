@@ -184,6 +184,54 @@ docker image prune
 
 `codex.devcontainer`は、
 
+## Claude code
+
+### 使用量のモニター
+
+`.claude/scripts/statusline.sh` に次のコードを作成する。
+
+```bash
+#!/bin/bash
+input=$(cat)
+
+# レート制限の取得
+five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+five_resets=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+seven_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+
+# 残り時間の計算
+now=$(date +%s)
+remaining_sec=$(( five_resets - now ))
+remaining_h=$(( remaining_sec / 3600 ))
+remaining_m=$(( (remaining_sec % 3600) / 60 ))
+
+# バー表示
+bar() {
+  local pct=$1
+  local filled=$(( pct / 10 ))
+  local empty=$(( 10 - filled ))
+  local result=""
+  for ((i=0; i<filled; i++)); do result+="█"; done
+  for ((i=0; i<empty; i++)); do result+="░"; done
+  echo "$result"
+}
+
+echo "⏱️ 5h [$(bar $five_pct)] ${five_pct}% (残り${remaining_h}h${remaining_m}m) 📅 7d [$(bar $seven_pct)] ${seven_pct}%"
+```
+
+そして、`.claude/settings.json`に次のコードを加える。
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/scripts/statusline.sh",
+    "padding": 0
+  }
+}
+
+```
+
 ## 参考
 
 - [Docker や VSCode + Remote-Container のパーミッション問題に立ち向かう](https://zenn.dev/forrep/articles/8c0304ad420c8e)
