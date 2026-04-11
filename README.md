@@ -88,8 +88,8 @@ services:
 
 ```Dockerfile
 ARG USERNAME=ubuntu
-ARG UID=$UID
-ARG GID=$GID
+ARG UID
+ARG GID
 
 # Remove user if already exist and create new user.
 RUN set -eux; \
