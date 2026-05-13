@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1.4
 FROM ubuntu:latest
 # suppress clear apt cache
-RUN rm /etc/apt/apt.conf.d/docker-clean
+RUN rm -f /etc/apt/apt.conf.d/docker-clean \
+    && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \
+    > /etc/apt/apt.conf.d/keep-cache
 
 ENV LANG=ja_JP.UTF-8
 ENV LC_ALL=ja_JP.UTF-8
